@@ -12,6 +12,7 @@ export default function App() {
   const [name, setName] = useState("");
   const [data, setData] = useState(load());
   const [page, setPage] = useState("home");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   function handleOnboard() {
     if (!name.trim()) return;
@@ -62,18 +63,24 @@ export default function App() {
   };
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "220px 1fr",
-        height: "100vh"
-      }}
-    >
-      <Sidebar
-        currentPage={page}
-        onChangePage={setPage}
-        onReset={handleReset}
-      />
+     <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: sidebarCollapsed ? "40px 1fr" : "220px 1fr",
+      height: "100vh",
+      width: "100vw",
+      margin: 0,
+      boxSizing: "border-box",
+      transition: "grid-template-columns 0.2s ease",
+    }}
+  >
+    <Sidebar
+      currentPage={page}
+      onChangePage={setPage}
+      onReset={handleReset}
+      collapsed={sidebarCollapsed}
+      onToggleCollapse={() => setSidebarCollapsed(prev => !prev)}
+    />
 
       <main style={{ padding: 16 }}>
         {page === "home" && (
