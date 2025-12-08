@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { load, save } from "../../../data/repo";
 
 export default function IncomePage({ onAdded }) {
