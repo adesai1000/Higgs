@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { getMeta, setMeta, load, save, resetAll } from "../../data/repo";
+import Home from "./components/Home";
 import { createSeedData } from "../../data/seedData";
-import Sidebar, { PAGES } from "./components/Sidebar";
-
-const dollars = v =>
-  `$${(v / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+import Sidebar from "./components/Sidebar";
 
 export default function App() {
   const meta = getMeta();
@@ -32,12 +30,14 @@ export default function App() {
       setPage("home");
     }
   }
-  function refreshData(){
-    
-  }
 
      if (!onboarded) {
     return (
+      <div style={{ padding: 24, maxWidth: 480 }}>
+        <h1>Higgs</h1>
+        <p>What is your name?</p>
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
+        <button onClick={handleOnboard} style={{ marginLeft: 8 }}>Continue</button>
       <div className="welcome-root">
         <div className="welcome-card">
           <h1 className="welcome-title">Higgs</h1>
@@ -255,16 +255,28 @@ export default function App() {
     );
   }
 
-  const months = Object.keys(data.monthly).sort();
-  const activeKey = months[months.length - 1];
-  const m = data.monthly[activeKey] || {
-    incomeCents: 0,
-    expenseCents: 0,
-    netWorthCents: 0,
-    byCategory: {}
-  };
-
   return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "220px 1fr",
+        height: "100vh",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          overflowY: "auto",
+          background: "white",
+          borderRight: "1px solid #ddd",
+          zIndex: 20,
+        }}
+      >
+        <Sidebar currentPage={page} onChangePage={setPage} onReset={handleReset} />
+      </div>
      <div
     style={{
       display: "grid",
@@ -303,12 +315,40 @@ export default function App() {
           </>
         )}
 
-        {page === "income" && <h2>Income page stub</h2>}
-        {page === "expenses" && <h2>Expenses page stub</h2>}
-        {page === "investments" && <h2>Investments page stub</h2>}
-        {page === "loans" && <h2>Loans page stub</h2>}
-        {page === "assets" && <h2>Assets page stub</h2>}
-      </main>
+      <div
+        style={{
+          height: "100vh",
+          overflowY: "scroll",
+          overflowX: "hidden",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          maxWidth: 1400,
+          width: "100%",
+          margin: "0 auto",
+          flex: 1,
+          position: "relative",
+          background: "transparent",
+        }}
+      >
+        <main
+          style={{
+            padding: 24,
+            width: "100%",
+            maxWidth: 1100,
+            boxSizing: "border-box",
+            position: "relative",
+            zIndex: 30,
+          }}
+        >
+          {page === "home" && <Home data={data} />}
+          {page === "income" && <h2>Income page stub</h2>}
+          {page === "expenses" && <h2>Expenses page stub</h2>}
+          {page === "investments" && <h2>Investments page stub</h2>}
+          {page === "loans" && <h2>Loans page stub</h2>}
+          {page === "assets" && <h2>Assets page stub</h2>}
+        </main>
+      </div>
     </div>
   );
 }
