@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { getMeta, setMeta, load, save, resetAll } from "../../data/repo";
 import Home from "./components/Home";
 import { createSeedData } from "../../data/seedData";
@@ -33,11 +33,6 @@ export default function App() {
 
      if (!onboarded) {
     return (
-      <div style={{ padding: 24, maxWidth: 480 }}>
-        <h1>Higgs</h1>
-        <p>What is your name?</p>
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
-        <button onClick={handleOnboard} style={{ marginLeft: 8 }}>Continue</button>
       <div className="welcome-root">
         <div className="welcome-card">
           <h1 className="welcome-title">Higgs</h1>
@@ -257,27 +252,6 @@ export default function App() {
 
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "220px 1fr",
-        height: "100vh",
-        overflow: "hidden",
-      }}
-    >
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          height: "100vh",
-          overflowY: "auto",
-          background: "white",
-          borderRight: "1px solid #ddd",
-          zIndex: 20,
-        }}
-      >
-        <Sidebar currentPage={page} onChangePage={setPage} onReset={handleReset} />
-      </div>
-     <div
     style={{
       display: "grid",
       gridTemplateColumns: sidebarCollapsed ? "40px 1fr" : "220px 1fr",
@@ -295,25 +269,6 @@ export default function App() {
       collapsed={sidebarCollapsed}
       onToggleCollapse={() => setSidebarCollapsed(prev => !prev)}
     />
-
-      <main style={{ padding: 16 }}>
-        {page === "home" && (
-          <>
-            <h2>Home</h2>
-            <p>Month: {activeKey}</p>
-            <p>
-              Total Net Worth: <strong>{dollars(m.netWorthCents)}</strong>
-            </p>
-            <p>Income this month: {dollars(m.incomeCents)}</p>
-            <p>Expenses this month: {dollars(m.expenseCents)}</p>
-            <p style={{ marginTop: 16 }}>
-              By Category:{" "}
-              {Object.entries(m.byCategory)
-                .map(([k, v]) => `${k}: ${dollars(v)}`)
-                .join(" | ")}
-            </p>
-          </>
-        )}
 
       <div
         style={{
