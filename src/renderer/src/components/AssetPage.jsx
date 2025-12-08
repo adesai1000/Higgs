@@ -31,6 +31,9 @@ export default function AssetPage({ onAdded }) {
       ...formData,
     };
 
+    console.log("Before save:", db.assets);
+    console.log("New asset:", asset);
+
     // Convert "value" to cents if present
     if (asset.value) {
       asset.valueCents = Math.round(Number(asset.value) * 100);
@@ -39,8 +42,13 @@ export default function AssetPage({ onAdded }) {
 
     db.assets.push(asset);
     save(db);
+    alert("Asset added!");
 
+    // refresh parent or clear fields
     onAdded?.();
+    setName("");
+    setCategory("");
+    setFormData({});
   }
 
   const dynamicFields = fieldsForCategory[category] ?? [];

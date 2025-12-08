@@ -12,7 +12,20 @@ export function setMeta(meta) {
 
 export function load() {
   const raw = localStorage.getItem(DATA_KEY);
-  return raw ? JSON.parse(raw) : null;
+  const parsed = raw ? JSON.parse(raw) : {};
+
+  return {
+    monthly: parsed.monthly || {},
+    incomes: parsed.incomes || [],
+    expenses: parsed.expenses || [],
+    assets: parsed.assets || [],
+    user: parsed.user || null,
+    categories: parsed.categories || [],
+    investments: parsed.investments || [],
+    loans: parsed.loans || [],
+    activity: parsed.activity || [],
+    version: parsed.version || 1,
+  };
 }
 
 export function save(data) {

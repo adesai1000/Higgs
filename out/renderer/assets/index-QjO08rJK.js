@@ -12460,7 +12460,19 @@ function setMeta(meta) {
 }
 function load() {
   const raw = localStorage.getItem(DATA_KEY);
-  return raw ? JSON.parse(raw) : null;
+  const parsed = raw ? JSON.parse(raw) : {};
+  return {
+    monthly: parsed.monthly || {},
+    incomes: parsed.incomes || [],
+    expenses: parsed.expenses || [],
+    assets: parsed.assets || [],
+    user: parsed.user || null,
+    categories: parsed.categories || [],
+    investments: parsed.investments || [],
+    loans: parsed.loans || [],
+    activity: parsed.activity || [],
+    version: parsed.version || 1
+  };
 }
 function save(data) {
   localStorage.setItem(DATA_KEY, JSON.stringify(data));
@@ -12955,13 +12967,19 @@ function AssetPage({ onAdded }) {
       createdAt: Date.now(),
       ...formData
     };
+    console.log("Before save:", db.assets);
+    console.log("New asset:", asset);
     if (asset.value) {
       asset.valueCents = Math.round(Number(asset.value) * 100);
       delete asset.value;
     }
     db.assets.push(asset);
     save(db);
+    alert("Asset added!");
     onAdded?.();
+    setName("");
+    setCategory("");
+    setFormData({});
   }
   const dynamicFields = fieldsForCategory[category] ?? [];
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: 20, maxWidth: 450 }, children: [
