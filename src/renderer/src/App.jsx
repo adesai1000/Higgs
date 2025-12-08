@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { getMeta, setMeta, load, save, resetAll } from "../../data/repo";
 import { createSeedData } from "../../data/seedData";
-import Sidebar, { PAGES } from "./components/Sidebar";
+import Sidebar from "./components/Sidebar";
 import ExpenseForm from "./components/ExpensePage";
 import IncomeForm from "./components/IncomePage";
+import AssetPage from "./components/AssetPage";
 
 const dollars = (v) =>
   `$${(v / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
@@ -314,7 +315,7 @@ export default function App() {
 
         {page === "investments" && <h2>Investments page stub</h2>}
         {page === "loans" && <h2>Loans page stub</h2>}
-        {page === "assets" && <h2>Assets page stub</h2>}
+        {page === "assets" && <AssetPage onAdded={refreshData} />}
       </main>
     </div>
   );

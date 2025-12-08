@@ -12931,6 +12931,84 @@ function IncomePage({ onAdded }) {
     ] })
   ] });
 }
+const fieldsForCategory = {
+  crypto: ["symbol", "quantity"],
+  business: ["category", "value"],
+  luxury: ["category", "value"],
+  vehicle: ["model", "year", "value"],
+  "real-estate": ["location", "value"]
+};
+function AssetPage({ onAdded }) {
+  const [category, setCategory] = reactExports.useState("");
+  const [name, setName] = reactExports.useState("");
+  const [formData, setFormData] = reactExports.useState({});
+  function handleFieldChange(field, value) {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  }
+  function handleSubmit() {
+    if (!name.trim() || !category) return;
+    const db = load();
+    const asset = {
+      id: crypto.randomUUID(),
+      type: category,
+      name,
+      createdAt: Date.now(),
+      ...formData
+    };
+    if (asset.value) {
+      asset.valueCents = Math.round(Number(asset.value) * 100);
+      delete asset.value;
+    }
+    db.assets.push(asset);
+    save(db);
+    onAdded?.();
+  }
+  const dynamicFields = fieldsForCategory[category] ?? [];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { padding: 20, maxWidth: 450 }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Add Asset" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Asset Category" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "select",
+      {
+        value: category,
+        onChange: (e) => {
+          setCategory(e.target.value);
+          setFormData({});
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "Select Category" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "crypto", children: "Crypto" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "business", children: "Business" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "luxury", children: "Luxury" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "vehicle", children: "Vehicle" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "real-estate", children: "Real Estate" })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("label", { children: "Asset Name" }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "input",
+      {
+        placeholder: "Name of asset",
+        value: name,
+        onChange: (e) => setName(e.target.value)
+      }
+    ),
+    dynamicFields.map((field) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("label", { style: { textTransform: "capitalize" }, children: field }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "input",
+        {
+          type: field === "quantity" || field === "year" || field === "value" ? "number" : "text",
+          placeholder: `Enter ${field}`,
+          value: formData[field] || "",
+          onChange: (e) => handleFieldChange(field, e.target.value)
+        }
+      )
+    ] }, field)),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("button", { onClick: handleSubmit, style: { marginTop: 20 }, children: "Add Asset" })
+  ] });
+}
 const dollars = (v) => `$${(v / 100).toLocaleString(void 0, { maximumFractionDigits: 2 })}`;
 function App() {
   const meta = getMeta();
@@ -13231,7 +13309,7 @@ function App() {
           page === "expenses" && /* @__PURE__ */ jsxRuntimeExports.jsx(ExpensePage, { onAdded: refreshData }),
           page === "investments" && /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Investments page stub" }),
           page === "loans" && /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Loans page stub" }),
-          page === "assets" && /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { children: "Assets page stub" })
+          page === "assets" && /* @__PURE__ */ jsxRuntimeExports.jsx(AssetPage, { onAdded: refreshData })
         ] })
       ]
     }
