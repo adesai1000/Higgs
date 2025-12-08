@@ -2,7 +2,6 @@ import { useState } from "react";
 import { load, save } from "../../../data/repo";
 
 export default function ExpensePage({ onAdded }) {
-  // Load only what we need for rendering
   const { categories } = load();
 
   const [date, setDate] = useState("");
@@ -13,13 +12,11 @@ export default function ExpensePage({ onAdded }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    // basic validation
     if (!date || !amount) {
       alert("Please fill Date and Amount.");
       return;
     }
 
-    // always load a fresh copy when modifying data
     const data = load();
 
     const exp = {
@@ -30,10 +27,7 @@ export default function ExpensePage({ onAdded }) {
       note,
     };
 
-    // add expense into list
     data.expenses.push(exp);
-
-    // get month "YYYY-MM"
     const month = date.slice(0, 7);
 
     if (!data.monthly[month]) {
@@ -49,13 +43,10 @@ export default function ExpensePage({ onAdded }) {
     data.monthly[month].byCategory[category] =
       (data.monthly[month].byCategory[category] || 0) + exp.amountCents;
 
-    // save to localStorage
     save(data);
 
-    // notify parent to refresh App's state
     onAdded();
 
-    // clear form
     setDate("");
     setAmount("");
     setNote("");

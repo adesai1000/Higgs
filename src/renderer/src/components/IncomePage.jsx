@@ -38,11 +38,9 @@ export default function IncomePage({ onAdded }) {
 
     data.monthly[month].incomeCents += income.amountCents;
 
-    // Save and tell App to refresh
     save(data);
     onAdded();
 
-    // Clear form
     setDate("");
     setAmount("");
     setSource("");

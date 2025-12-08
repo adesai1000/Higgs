@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { load, save } from "../../../data/repo";
 
 export default function ExpenseForm({ onAdded }) {
@@ -23,10 +23,8 @@ export default function ExpenseForm({ onAdded }) {
       note,
     };
 
-    // Push into expenses array
     data.expenses.push(newExpense);
 
-    // Update monthly rollup
     const monthKey = date.slice(0, 7);
     if (!data.monthly[monthKey]) {
       data.monthly[monthKey] = {
@@ -44,7 +42,7 @@ export default function ExpenseForm({ onAdded }) {
       (m.byCategory[category] || 0) + newExpense.amountCents;
 
     save(data);
-    onAdded(); // tell parent to refresh
+    onAdded();
   }
 
   return (
