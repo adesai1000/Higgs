@@ -3,6 +3,9 @@ import { getMeta, setMeta, load, save, resetAll } from "../../data/repo";
 import Home from "./components/Home";
 import { createSeedData } from "../../data/seedData";
 import Sidebar from "./components/Sidebar";
+import IncomePage from "./components/IncomePage";
+import ExpensePage from "./components/ExpensePage";
+import AssetPage from "./components/AssetPage";
 
 export default function App() {
   const meta = getMeta();
@@ -28,6 +31,13 @@ export default function App() {
       setData(null);
       setName("");
       setPage("home");
+    }
+  }
+
+  function refreshData() {
+    const fresh = load();
+    if (fresh) {
+      setData(fresh);
     }
   }
 
@@ -254,12 +264,15 @@ export default function App() {
     <div
     style={{
       display: "grid",
-      gridTemplateColumns: sidebarCollapsed ? "40px 1fr" : "220px 1fr",
+      gridTemplateColumns: sidebarCollapsed ? "56px 1fr" : "240px 1fr",
       height: "100vh",
       width: "100vw",
       margin: 0,
+      padding: 0,
       boxSizing: "border-box",
       transition: "grid-template-columns 0.2s ease",
+      overflow: "hidden",
+      position: "relative",
     }}
   >
     <Sidebar
@@ -297,11 +310,11 @@ export default function App() {
           }}
         >
           {page === "home" && <Home data={data} />}
-          {page === "income" && <h2>Income page stub</h2>}
-          {page === "expenses" && <h2>Expenses page stub</h2>}
+          {page === "income" && <IncomePage onAdded={refreshData} />}
+          {page === "expenses" && <ExpensePage onAdded={refreshData} />}
           {page === "investments" && <h2>Investments page stub</h2>}
           {page === "loans" && <h2>Loans page stub</h2>}
-          {page === "assets" && <h2>Assets page stub</h2>}
+          {page === "assets" && <AssetPage onAdded={refreshData} />}
         </main>
       </div>
     </div>
