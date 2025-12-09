@@ -6,6 +6,8 @@ import Sidebar from "./components/Sidebar";
 import IncomePage from "./components/IncomePage";
 import ExpensePage from "./components/ExpensePage";
 import AssetPage from "./components/AssetPage";
+import LoanPage from "./components/LoanPage";
+import InvestmentPage from "./components/InvestmentPage";
 
 export default function App() {
   const meta = getMeta();
@@ -312,8 +314,8 @@ export default function App() {
           {page === "home" && <Home data={data} />}
           {page === "income" && <IncomePage onAdded={refreshData} />}
           {page === "expenses" && <ExpensePage onAdded={refreshData} />}
-          {page === "investments" && <h2>Investments page stub</h2>}
-          {page === "loans" && <h2>Loans page stub</h2>}
+          {page === "investments" && <InvestmentPage onAdded={refreshData} />}
+          {page === "loans" && <LoanPage onAdded={refreshData} />}
           {page === "assets" && <AssetPage onAdded={refreshData} />}
         </main>
       </div>

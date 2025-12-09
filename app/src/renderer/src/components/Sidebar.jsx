@@ -23,7 +23,7 @@ export default function Sidebar({
     <aside
       style={{
         borderRight: "1px solid rgba(255, 255, 255, 0.1)",
-        padding: isCollapsed ? "16px 8px 16px 8px" : "20px 20px 20px 20px",
+        padding: isCollapsed ? "16px 8px 16px 18px" : "20px 20px 20px 20px",
         paddingTop: isCollapsed ? "16px" : "20px",
         background: "rgba(10, 10, 15, 0.85)",
         backdropFilter: "blur(12px)",

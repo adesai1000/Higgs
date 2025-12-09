@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { load, save } from "../../../data/repo";
+import { recalculateAllStats } from "../../../data/calculations";
 
 export default function IncomePage({ onAdded }) {
   const [date, setDate] = useState("");
@@ -16,6 +17,11 @@ export default function IncomePage({ onAdded }) {
     }
 
     const data = load();
+    if (!data) {
+      alert("Error: No data found. Please refresh the app.");
+      return;
+    }
+
     const income = {
       id: "inc" + Date.now(),
       date,
@@ -24,21 +30,16 @@ export default function IncomePage({ onAdded }) {
       note,
     };
 
-    data.incomes.push(income);
-
-    const month = date.slice(0, 7);
-    if (!data.monthly[month]) {
-      data.monthly[month] = {
-        incomeCents: 0,
-        expenseCents: 0,
-        netWorthCents: 0,
-        byCategory: {},
-      };
+    // Ensure incomes array exists
+    if (!data.incomes) {
+      data.incomes = [];
     }
 
-    data.monthly[month].incomeCents += income.amountCents;
+    data.incomes.push(income);
 
-    save(data);
+    // Recalculate all monthly stats and net worth
+    const updatedData = recalculateAllStats(data);
+    save(updatedData);
     onAdded();
 
     setDate("");

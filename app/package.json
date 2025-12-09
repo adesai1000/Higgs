@@ -1,7 +1,7 @@
 {
   "name": "higgs",
   "version": "1.0.0",
-  "description": "An Electron application with React",
+  "description": "Higgs - Personal Finance Tracker, because money needs mass to become wealth.",
   "main": "./out/main/index.js",
   "author": "example.com",
   "homepage": "https://electron-vite.org",

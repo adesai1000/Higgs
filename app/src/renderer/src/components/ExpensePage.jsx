@@ -1,23 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { load, save } from "../../../data/repo";
+import { recalculateAllStats } from "../../../data/calculations";
 
 export default function ExpensePage({ onAdded }) {
-  const { categories } = load();
+  const data = load();
+  const categories = data?.categories || [];
 
   const [date, setDate] = useState("");
   const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState(categories[0]);
+  const [category, setCategory] = useState(categories[0] || "");
   const [note, setNote] = useState("");
+
+  useEffect(() => {
+    if (categories.length > 0 && !category) {
+      setCategory(categories[0]);
+    }
+  }, [categories, category]);
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (!date || !amount) {
-      alert("Please fill Date and Amount.");
+    if (!date || !amount || !category) {
+      alert("Please fill Date, Amount, and Category.");
       return;
     }
 
-    const data = load();
+    const currentData = load();
+    if (!currentData) {
+      alert("Error: No data found. Please refresh the app.");
+      return;
+    }
 
     const exp = {
       id: "exp" + Date.now(),
@@ -27,24 +39,16 @@ export default function ExpensePage({ onAdded }) {
       note,
     };
 
-    data.expenses.push(exp);
-    const month = date.slice(0, 7);
-
-    if (!data.monthly[month]) {
-      data.monthly[month] = {
-        incomeCents: 0,
-        expenseCents: 0,
-        netWorthCents: 0,
-        byCategory: {},
-      };
+    // Ensure expenses array exists
+    if (!currentData.expenses) {
+      currentData.expenses = [];
     }
 
-    data.monthly[month].expenseCents += exp.amountCents;
-    data.monthly[month].byCategory[category] =
-      (data.monthly[month].byCategory[category] || 0) + exp.amountCents;
+    currentData.expenses.push(exp);
 
-    save(data);
-
+    // Recalculate all monthly stats and net worth
+    const updatedData = recalculateAllStats(currentData);
+    save(updatedData);
     onAdded();
 
     setDate("");

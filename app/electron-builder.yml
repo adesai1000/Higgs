@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: higgs
+appId: com.higgs.app
+productName: Higgs
 directories:
   buildResources: build
 files:
