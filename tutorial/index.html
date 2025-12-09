@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Higgs Tutorial</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --ink: #1f2430;
+      --muted: #4c5568;
+      --card: #ffffff;
+      --accent: #4f46e5;
+      --accent-soft: #e5e7ff;
+      --border: #e5e7eb;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0 18px 60px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.65;
+      max-width: 1180px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    header {
+      padding: 24px 0 12px;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      color: #121624;
+      margin: 0 0 12px;
+      line-height: 1.25;
+    }
+
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-top: 28px;
+    }
+
+    h3 {
+      font-size: 19px;
+      margin-top: 24px;
+    }
+
+    h4 {
+      font-size: 17px;
+      margin-top: 18px;
+    }
+
+    p {
+      margin: 12px 0;
+      color: var(--muted);
+    }
+
+    ul {
+      padding-left: 20px;
+      color: var(--muted);
+    }
+
+    code,
+    pre {
+      font-family: var(--mono);
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 14px 16px;
+      border-radius: 10px;
+      overflow-x: auto;
+      margin: 14px 0;
+      border: 1px solid #111827;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.06);
+      margin: 12px 0 18px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin: 14px 0;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.06);
+    }
+
+    .callout {
+      border-left: 4px solid var(--accent);
+      padding-left: 12px;
+      margin: 10px 0;
+      color: var(--muted);
+    }
+
+    .steps ol {
+      padding-left: 20px;
+    }
+
+    .steps li {
+      margin: 8px 0;
+      color: var(--muted);
+    }
+
+    footer {
+      margin-top: 36px;
+      padding: 12px 0 24px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="badge">Higgs - Personal Finance Desktop Application</div>
+    <h1>Made using Electron + React</h1>
+    <p>
+      This is a self-contained tutorial website that contains:
+      hyperlinked table of contents, learning outcomes with Bloom-style verbs, step-by-step activities tied to
+      SER421/SER598 concepts, history and standards, analytical perspective, demo code walkthrough, and complete
+      references/resources.
+    </p>
+  </header>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h3 id="toc">Table of Contents</h3>
+    <ul>
+      <li><a href="#learning-outcomes">Learning Outcomes</a></li>
+      <li><a href="#what-you-build">What You Build and Demo</a></li>
+      <li><a href="#history-and-standards">History and Standards</a></li>
+      <li><a href="#architecture-overview">Architecture Overview</a></li>
+      <li><a href="#code-snippets">Code Snippets from the App</a></li>
+      <li><a href="#step-by-step">Step-by-Step Learning Activities</a></li>
+      <li><a href="#ser421-ties">SER421 Concept Connections</a></li>
+      <li><a href="#analytical-component">Analytical Component</a></li>
+      <li><a href="#demo-instructions">Demo, Build, and Environment Setup</a></li>
+      <li><a href="#future-learning">Future Learning: APIs, Realtime Data</a></li>
+      <li><a href="#resources">Further Resources</a></li>
+      <li><a href="#references">References</a></li>
+
+    </ul>
+  </nav>
+
+  <section id="learning-outcomes">
+    <h2>Learning Outcomes</h2>
+    <p>By the end of this tutorial, a learner will be able to:</p>
+    <ul>
+      <li><strong>Explain</strong> the separation of concerns between Electron’s main, preload, and renderer processes.
+      </li>
+      <li><strong>Configure</strong> a Vite-powered React renderer inside an Electron shell and run it in development
+        mode.</li>
+      <li><strong>Implement</strong> local persistence using the Web Storage API (`localStorage`) for a personal finance
+        dashboard.</li>
+      <li><strong>Extend</strong> a React single-page shell with sidebar navigation and multi-page state.</li>
+      <li><strong>Evaluate</strong> trade-offs of Electron compared with native and PWA approaches, citing performance
+        and distribution issues.</li>
+      <li><strong>Build</strong> a executable desktop application for macOS, Windows, and Linux using electron-builder.
+      </li>
+    </ul>
+  </section>
+
+  <section id="what-you-build">
+    <h2>What You Build and Demo</h2>
+    <p>
+      You will run and understand <strong>Higgs</strong>, a desktop personal finance helper built with Electron and
+      React.
+      The app onboards a user, seeds starter data, lets you add income, expenses, investments, loans, and assets, and
+      summarizes stats.
+    </p>
+    <div class="card">
+      <h3>Scope of the demo</h3>
+      <ul>
+        <li>Desktop shell: Electron main process creates a BrowserWindow and wires preload.</li>
+        <li>Renderer: React (via Vite) renders onboarding, sidebar, and pages.</li>
+        <li>Data: `localStorage` persistence via `app/src/data/repo.js` with deterministic seeding (`seedData.js`).</li>
+        <li>Pages: Home, Income, Expenses, Investments, Loans, Assets (see `app/src/renderer/src/components/`).</li>
+        <li>Build: electron-builder targets macOS/Windows/Linux through npm scripts.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="history-and-standards">
+    <h2>History and Standards</h2>
+    <p>
+      Electron originated at GitHub (2013, then “Atom Shell”) to bundle Chromium with Node.js so web engineers could
+      deliver desktop apps.
+      It follows core web standards (HTML5, CSS3, ECMAScript, DOM, Web Storage) and ships with a pinned Chromium to
+      guarantee render consistency.
+      Packaging standards leverage platform installers: dmg/zip (macOS), NSIS/zip (Windows), AppImage/Deb/RPM (Linux).
+    </p>
+    <p>
+      React (2013, Facebook) brought declarative UI with a virtual DOM. Vite (2020, Evan You) improved dev speed with
+      native ES modules and fast HMR.
+      Electron’s IPC and preload align with sandboxing principles to separate Node APIs from the browser context.
+    </p>
+    <div class="card">
+      <h3>Key standards and specs</h3>
+      <ul>
+        <li>ECMAScript 2015+ (modules, promises), DOM Living Standard, CSS 2.1/3.</li>
+        <li>Web Storage API (localStorage) for persistence in the renderer.</li>
+        <li>CommonJS/ESM for module loading in main/preload (Node context).</li>
+        <li>Platform packaging: code signing and entitlements (macOS), MSI/NSIS (Windows), AppImage/Deb/RPM (Linux).
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="architecture-overview">
+    <h2>Architecture Overview</h2>
+    <div class="card">
+      <h3>Processes and boundaries</h3>
+      <ul>
+        <li><strong>Main process</strong> (`app/src/main/index.js`): creates BrowserWindow, loads renderer URL/bundle,
+          controls lifecycle.</li>
+        <li><strong>Preload</strong> (`app/src/preload/index.js`): safe bridge layer; keeps Node out of the renderer
+          surface.</li>
+        <li><strong>Renderer</strong> (`app/src/renderer/src/main.jsx`, `App.jsx`): React SPA hosting onboarding,
+          sidebar, pages.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Data and state</h3>
+      <ul>
+        <li><strong>Persistence</strong>: `app/src/data/repo.js` uses `localStorage` for `higgs:data` and `higgs:meta`
+          keys.</li>
+        <li><strong>Seeding</strong>: `app/src/data/seedData.js` builds starter categories and stats via
+          `recalculateAllStats`.</li>
+        <li><strong>Reset</strong>: `resetAll()` clears storage and returns to onboarding.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>UI composition</h3>
+      <ul>
+        <li><strong>App shell</strong>: `App.jsx` manages onboarding state, sidebar collapse, and page routing via local
+          state.</li>
+        <li><strong>Pages</strong>: components under `app/src/renderer/src/components/` (Home, IncomePage, ExpensePage,
+          InvestmentPage, LoanPage, AssetPage, Sidebar, Versions).</li>
+        <li><strong>Styling</strong>: `app/src/renderer/src/assets/*.css` plus inline styles for the welcome screen.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="code-snippets">
+    <h2>Code Snippets from the App</h2>
+    <div class="card">
+      <h3>Onboarding and navigation (renderer shell)</h3>
+      <pre>// app/src/renderer/src/App.jsx
+const meta = getMeta();
+const [onboarded, setOnboarded] = useState(meta.onboarded);
+const [name, setName] = useState("");
+const [data, setData] = useState(load());
+const [page, setPage] = useState("home");
+
+function handleOnboard() {
+  if (!name.trim()) return;
+  const seeded = createSeedData(name.trim());
+  save(seeded);
+  setMeta({ onboarded: true });
+  setData(seeded);
+  setOnboarded(true);
+}</pre>
+      <p>Notes: onboarding seeds data and writes `higgs:meta` and `higgs:data`, then updates React state to render
+        pages.</p>
+    </div>
+    <div class="card">
+      <h3>Local persistence helpers</h3>
+      <pre>// app/src/data/repo.js
+const DATA_KEY = "higgs:data";
+const META_KEY = "higgs:meta";
+
+export function load() {
+  const raw = localStorage.getItem(DATA_KEY);
+  return raw ? JSON.parse(raw) : null;
+}
+
+export function save(data) {
+  localStorage.setItem(DATA_KEY, JSON.stringify(data));
+}
+
+export function resetAll() {
+  localStorage.removeItem(DATA_KEY);
+  localStorage.removeItem(META_KEY);
+}</pre>
+      <p>Notes: simple Web Storage persistence; reset clears both meta (onboarded flag) and data.</p>
+    </div>
+    <div class="card">
+      <h3>Seed data shape</h3>
+      <pre>// app/src/data/seedData.js
+export const CATEGORIES = [
+  "Housing", "Utilities", "Transportation", "Groceries", "Dining Out",
+  "Health & Medical", "Entertainment", "Shopping", "Education",
+  "Loan Repayment", "Family & Children", "Gifts & Donations",
+  "Travel", "Miscellaneous",
+];
+
+export function createSeedData(name = "User") {
+  const today = new Date();
+  const data = {
+    version: 1,
+    user: { id: "u1", name, createdAt: today.toISOString().slice(0, 10) },
+    categories: CATEGORIES,
+    incomes: [],
+    expenses: [],
+    investments: [],
+    loans: [],
+    assets: [],
+    monthly: {},
+    activity: [],
+  };
+  return recalculateAllStats(data);
+}</pre>
+      <p>Notes: seed keeps arrays empty but computes monthly stats to prime the dashboard.</p>
+    </div>
+  </section>
+
+  <section id="step-by-step">
+    <h2>Step-by-Step Learning Activities</h2>
+    <p>Scripted activities to achieve the learning outcomes. Each step includes action, rationale, and self-checks.</p>
+    <div class="steps">
+      <h3>1) Prepare environment</h3>
+      <ol>
+        <li><strong>Action:</strong> Ensure Node 18+ and npm 9+ are installed. Run <code>node -v</code> and
+          <code>npm -v</code>.
+        </li>
+        <li><strong>Why:</strong> Electron + Vite toolchain depends on modern Node features and esbuild.</li>
+        <li><strong>Check:</strong> Versions print without errors.</li>
+      </ol>
+
+      <h3>2) Install dependencies</h3>
+      <ol>
+        <li><strong>Action:</strong> In the repo root, run <code>cd app && npm install</code>.</li>
+        <li><strong>Why:</strong> Pulls Electron, React, Vite, and build tooling (electron-builder).</li>
+        <li><strong>Check:</strong> <code>node_modules</code> appears; no install errors.</li>
+      </ol>
+
+      <h3>3) Examine data persistence</h3>
+      <ol>
+        <li><strong>Action:</strong> Open <code>app/src/data/repo.js</code>. Identify <code>load</code>,
+          <code>save</code>, <code>resetAll</code>.
+        </li>
+        <li><strong>Why:</strong> Understand how `localStorage` keys (`higgs:data`, `higgs:meta`) back the app.</li>
+        <li><strong>Check:</strong> Note that onboarding status is stored in `higgs:meta`.</li>
+      </ol>
+
+      <h3>4) Review seed data</h3>
+      <ol>
+        <li><strong>Action:</strong> Read <code>app/src/data/seedData.js</code> to see categories and the initial data
+          shape.</li>
+        <li><strong>Why:</strong> Seeded data drives the initial dashboard and monthly stats.</li>
+        <li><strong>Check:</strong> Recognize `createSeedData(name)` uses `recalculateAllStats` to populate monthly
+          summaries.</li>
+      </ol>
+
+      <h3>5) Understand the React shell</h3>
+      <ol>
+        <li><strong>Action:</strong> Open <code>app/src/renderer/src/App.jsx</code>.</li>
+        <li><strong>Why:</strong> This component controls onboarding, sidebar navigation, and which page renders.</li>
+        <li><strong>Check:</strong> Confirm the `page` state drives conditional rendering for
+          Home/Income/Expenses/Investments/Loans/Assets.</li>
+      </ol>
+
+      <h3>6) Run in development</h3>
+      <ol>
+        <li><strong>Action:</strong> From <code>app</code>, run <code>npm run dev</code>. If prompted, click to open the
+          Electron window.</li>
+        <li><strong>Why:</strong> Experience the hot loaded application via Electron shell and Vite HMR.</li>
+        <li><strong>Check:</strong> Welcome screen renders; no console errors in DevTools.</li>
+      </ol>
+
+      <h3>7) Complete onboarding</h3>
+      <ol>
+        <li><strong>Action:</strong> Enter a name and click Continue.</li>
+        <li><strong>Why:</strong> Triggers `handleOnboard` → seeds data → writes to `localStorage`.</li>
+        <li><strong>Check:</strong> Home page shows starter stats; storage now has `higgs:data` and `higgs:meta`.</li>
+      </ol>
+
+      <h3>8) Navigate and add entries</h3>
+      <ol>
+        <li><strong>Action:</strong> Use the sidebar to open Income, Expenses, Investments, Loans, Assets; add at least
+          one record per relevant page.</li>
+        <li><strong>Why:</strong> Exercises the save/recompute flows and UI state updates.</li>
+        <li><strong>Check:</strong> Home totals reflect new entries; refreshing the app preserves data (because of
+          `localStorage`).</li>
+      </ol>
+
+      <h3>9) Reset data</h3>
+      <ol>
+        <li><strong>Action:</strong> Click Reset in the sidebar and confirm.</li>
+        <li><strong>Why:</strong> Verifies `resetAll` clears storage and returns to onboarding.</li>
+        <li><strong>Check:</strong> Welcome screen reappears; `localStorage` keys are removed.</li>
+      </ol>
+
+      <h3>10) Build distributables</h3>
+      <ol>
+        <li><strong>Action:</strong> From <code>app</code>, run:
+          <pre>npm run build:mac   # macOS
+npm run build:win   # Windows
+npm run build:linux # Linux</pre>
+        </li>
+        <li><strong>Why:</strong> Produces platform installers via electron-builder.</li>
+        <li><strong>Check:</strong> Artifacts appear under <code>app/dist</code> (platform-specific output folders).
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="ser421-ties">
+    <h2>SER421 Concept Connections</h2>
+    <ul>
+      <li><strong>Client-side state and storage:</strong> `localStorage` persistence mirrors web SPA patterns discussed
+        in class.</li>
+      <li><strong>SPA routing via state:</strong> `App.jsx` uses local state for page selection—relates to SPA
+        navigation concepts.</li>
+      <li><strong>Modularity and separation:</strong> Main vs preload vs renderer illustrates layered architecture and
+        least-privilege access.</li>
+      <li><strong>Build tooling:</strong> Vite HMR and bundling reflect modern web toolchains covered in SER421 labs.
+      </li>
+      <li><strong>Trade-off analysis:</strong> Electron vs native vs PWA maps to architecture comparison exercises in
+        class.</li>
+    </ul>
+  </section>
+
+  <section id="analytical-component">
+    <h2>Analytical Component (Opinion + Evidence)</h2>
+    <div class="card">
+      <h3>Strengths of Electron for Higgs</h3>
+      <ul>
+        <li><strong>Unified skillset:</strong> Web developers can start to ship desktop apps without switching tech
+          stacks.</li>
+        <li><strong>Fast iteration:</strong> Vite + Electron gives tight feedback loops, accelerating feature work, and
+          it supports server side updates</li>
+        <li><strong>Cross-platform support:</strong> One codebase, three OS targets; electron-builder helps with all the
+          packaging.</li>
+        <li><strong>Local-first:</strong> `localStorage` is trivial to wire for a personal finance app with no backend.
+        </li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Limitations and risks</h3>
+      <ul>
+        <li><strong>Runtime footprint:</strong> Bundled Chromium inflates binary size and memory compared to native or
+          Tauri.</li>
+        <li><strong>Storage durability:</strong> `localStorage` is not robust for multi-user, syncing, or large
+          datasets.</li>
+        <li><strong>No Encryption</strong> Current version of this application stores everything in LocalStorage as
+          PlainText, you can try encrypting all data for added Security.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Future directions and mitigations</h3>
+      <ul>
+        <li>Migrate persistence to SQLite (via better-sqlite3) or an dedicated DB for offering data sync and backup.
+        </li>
+        <li>Add secure IPC channels for exporting data, notifications, or OS integration with strict allowlists.</li>
+        <li>Adding realtime investment portfolio net worth with API requests</li>
+        <li>Add automated tests: unit tests for data functions; Playwright for renderer flows; lint and type checks.
+        </li>
+      </ul>
+    </div>
+    <p class="callout">
+      Evidence basis: Electron’s ecosystem and docs, Vite’s benchmarked speed.
+    </p>
+  </section>
+
+  <section id="demo-instructions">
+    <h2>Demo, Build, and Environment Setup</h2>
+    <div class="card">
+      <h3>Prerequisites</h3>
+      <ul>
+        <li>Node 18+ and npm 9+.</li>
+        <li>macOS, Windows, or Linux; Git installed.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Install and run (development)</h3>
+      <pre>cd app
+npm install
+npm run dev</pre>
+      <p>When prompted, open the Electron window. The renderer uses Vite’s dev server; changes hot-reload.</p>
+    </div>
+    <div class="card">
+      <h3>Build (production)</h3>
+      <pre>cd app
+npm run build:mac  # or build:win or build:linux</pre>
+      <pre>On Mac: you might need to install XCode Dev Tools but if you use HomeBrew, you already have it!</pre>
+      <p>Artifacts are placed in <code>app/dist</code> under platform-specific folders (e.g., <code>mac</code>,
+        <code>win-unpacked</code>, <code>linux</code>).
+      </p>
+    </div>
+    <div class="card">
+      <h3>Project map (files to explore)</h3>
+      <ul>
+        <li>Main: <code>app/src/main/index.js</code></li>
+        <li>Preload: <code>app/src/preload/index.js</code></li>
+        <li>Renderer entry: <code>app/src/renderer/src/main.jsx</code></li>
+        <li>Shell: <code>app/src/renderer/src/App.jsx</code></li>
+        <li>Components: <code>app/src/renderer/src/components/*.jsx</code></li>
+        <li>Data: <code>app/src/data/repo.js</code>, <code>seedData.js</code>, <code>calculations.js</code></li>
+        <li>Build config: <code>app/electron.vite.config.mjs</code>, <code>app/electron-builder.yml</code></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="future-learning">
+    <h2>Future Learning: APIs, Realtime Data, Security</h2>
+    <div class="card">
+      <h3>Adding realtime investments with API requests</h3>
+      <ul>
+        <li><strong>Goal:</strong> Replace manual price entry with live quotes. Add a service module (e.g.,
+          <code>app/src/data/quotes.js</code>) that fetches from a stock API (Finnhub, Alpha Vantage, or a free sandbox)
+          using <code>fetch</code> in the renderer or via a preload-bridged IPC call for better key hygiene.
+        </li>
+        <li><strong>Pattern:</strong> Create a <code>getQuote(ticker)</code> function that returns { price, currency,
+          asOf }. Cache in-memory to reduce calls; throttle requests. Example (renderer-safe fetch):</li>
+      </ul>
+      <pre>// quotes.js (renderer)
+const API_KEY = import.meta.env.VITE_STOCK_KEY;
+export async function getQuote(ticker) {
+  const res = await fetch(
+    `https://api.example.com/quote?symbol=${ticker}&token=${API_KEY}`
+  );
+  if (!res.ok) throw new Error("Quote fetch failed");
+  const json = await res.json();
+  return { price: json.c, currency: json.currency, asOf: json.t };
+}</pre>
+      <ul>
+        <li><strong>UI change:</strong> In Investments page, when user types a ticker and quantity, auto-fetch price and
+          show a confirmation. On save, store the fetched price and timestamp for traceability.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Loan auto-deduction from net worth</h3>
+      <ul>
+        <li><strong>Goal:</strong> Track monthly payments and automatically reflect principal reduction in net worth.
+        </li>
+        <li><strong>Approach:</strong> Extend the data model: each loan has <code>principal</code>, <code>rate</code>,
+          <code>termMonths</code>, <code>monthlyPayment</code>, <code>nextDueDate</code>, <code>paidHistory</code>.
+        </li>
+        <li><strong>Computation:</strong> On app load or when date changes, run a scheduler (e.g., daily check) that
+          applies any due payments: subtract payment from cash, reduce principal by amortized amount, log activity, and
+          recompute stats.</li>
+        <li><strong>UI:</strong> Show upcoming due date and a “Run payment now” button; optionally add auto-run toggle.
+        </li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Data security and encryption</h3>
+      <ul>
+        <li><strong>Why:</strong> LocalStorage is plain text. For better confidentiality, encrypt persisted data.</li>
+        <li><strong>Lightweight option:</strong> Use Web Crypto (AES-GCM) in the renderer with a user-supplied
+          passphrase. Store only ciphertext + IV in <code>localStorage</code>; derive a key with PBKDF2/argon2 via Web
+          Crypto.</li>
+        <li><strong>Stronger isolation:</strong> Move encryption into preload or a Node module (main process) and expose
+          minimal IPC to encrypt/decrypt blobs. Keep key in memory only; consider prompting per session.</li>
+        <li><strong>Future-proofing:</strong> If migrating to a stronger backend (e.g., SQLite), use file-level
+          encryption (SQLCipher) or OS keychain to store secrets.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Learning next</h3>
+      <ul>
+        <li>Explore IPC patterns in Electron docs to fetch external APIs from main/preload safely.</li>
+        <li>Practice building a small “quotes widget” with live polling or websockets if the API supports streaming.
+        </li>
+        <li>Add automated tests around investment pricing and loan amortization to validate calculations.</li>
+      </ul>
+    </div>
+  </section>
+  </section>
+  <section id="resources">
+    <h2>Further Resources (for extended learning)</h2>
+    <ul>
+      <li>Secure preload guidance - <a href="https://www.electronjs.org/docs/latest/tutorial/sandbox">Electron sandbox
+          docs</a></li>
+      <li>Tauri vs Electron comparison — <a
+          href="https://tauri.app/v1/about/intro/">https://tauri.app/v1/about/intro/</a></li>
+      <li>Web Storage API — <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API">MDN Web
+          Storage</a></li>
+      <li>Playwright for Electron testing — <a
+          href="https://playwright.dev/docs/api/class-electron">https://playwright.dev/docs/api/class-electron</a></li>
+      <li>Bloom’s verbs quick reference - <a
+          href="https://www.utica.edu/academic/Assessment/new/Blooms%20Taxonomy%20-%20Best.pdf">CTE Bloom’s verbs</a>
+      </li>
+    </ul>
+  </section>
+  <section id="references">
+    <h2>References</h2>
+    <p>Evidence sources cited for history, standards, and analytical claims.</p>
+    <ul>
+      <li>Electron documentation - <a
+          href="https://www.electronjs.org/docs/latest">https://www.electronjs.org/docs/latest</a></li>
+      <li>Vite documentation - <a href="https://vitejs.dev/guide/">https://vitejs.dev/guide/</a></li>
+      <li>React documentation - <a href="https://react.dev/learn">https://react.dev/learn</a></li>
+      <li>Electron Vite starter patterns - <a
+          href="https://github.com/electron-vite/electron-vite">https://github.com/electron-vite/electron-vite</a></li>
+      <li>Electron History - <a
+          href="https://en.wikipedia.org/wiki/Electron_(software_framework)">https://en.wikipedia.org/wiki/Electron_(software_framework)</a>
+      </li>
+    </ul>
+  </section>
+</body>
+
+</html>
